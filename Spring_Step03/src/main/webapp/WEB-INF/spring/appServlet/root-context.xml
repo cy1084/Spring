@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- TODO 016 MyBatis의 설정을 가지고 spring template 객체(bean)로 만들어 준다 -->
+	<!-- properties 파일을 spring이 사용할 수 있는 bean으로 생성 -->
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:properties/db.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 생성된 properties bean을 통해 DataSource bean을 생성 -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<!-- 자바 땐 POOLED 사용! -->
+		<property name="driverClassName" value="${driver}" />
+		<property name="url" value="${url}" />
+		<property name="username" value="${user}" />
+		<property name="password" value="${pw}" />
+		
+	</bean>
+		
+	<!-- DataSource bean 객체를 사용하여 SqlSessionFactory를 bean으로 만들어줌 -->
+	<bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="configLocation" value="classpath:mybatis/Config.xml"/>
+		<!-- 개발을 편하게 하기 위해 만들어놓은 src/main/resources는 classpath에 포함 안함 -->
+		<!-- 빈: 객체 생성, 빈을 만들어놓으면 따로 new 하지 않아도 됨 -->
+	</bean>
+		
+	<!-- mybatis의 SqlSessionFactoryBean을 Spring에서 사용하는 template으로 만들어 주입해서 사용 -->
+	<bean id="SqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="sqlSessionFactoryBean"/>
+	</bean>
+	
+
+
+</beans>

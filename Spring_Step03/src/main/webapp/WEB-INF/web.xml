@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="4.0"
+	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee                       http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd">
+
+	<welcome-file-list>
+		<!-- TODO 007_01 처음 실행되는 Controller에 *.do 추가 spring 4.3.x 버전에서는 do 호출이 가능 
+			하지만 spring 5.x 버전에서는 처음 페이지로 do를 호출 할 수 없다 -->
+		<!-- welcome-file은 여러 개 써도 상관없고 404가 뜨면 그 다음 페이지를 호출! -->
+		<welcome-file>home.do</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+
+	</welcome-file-list>
+
+	<!-- context-param: 프로젝트 전체에서 사용되는 param -->
+<!-- 	<context-param> -->
+<!-- 		<param-name>contextConfigLocation</param-name> -->
+<!-- 		<param-value>/WEB-INF/spring/appServlet/root-context.xml</param-value> -->
+<!-- 	</context-param> -->
+	
+	<!-- TODO 013 spring bean configuration 설정/ Model에 관련된 설정! -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/spring/appServlet/root-context.xml</param-value>
+	</context-param>
+
+	<!-- TODO 013 여러 개의 같은 context를 사용하기 위한 spring listener -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+	<!-- TODO 001 Spring bean Configuration을 통해 DispatcherServlet에 필요한 환경을 설정 -->
+	<!-- View, Controller에 관련된 설정 -->
+	<servlet>
+		<servlet-name>springDispatcherServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<!-- init-param: 이 dispatcher에서만 사용되는 param -->
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/spring/appServlet/servlet-context.xml</param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>springDispatcherServlet</servlet-name>
+		<url-pattern>*.do</url-pattern>
+	</servlet-mapping>
+
+	<!-- TODO 010 Servlet에서 Spring의 DispatcherServlet으로 전송되는 Request 값을 인코딩 
+		처리 Springframework의 filter 사용 -->
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- TODO 011 요청하는 페이지의 정보를 추출하여 유효성 및 값 전달을 처리하기 위한 Filter -->
+	<filter>
+		<filter-name>AccessLogFilter</filter-name>
+		<filter-class>com.min.edu.filter.AccessLogFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>AccessLogFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+</web-app>

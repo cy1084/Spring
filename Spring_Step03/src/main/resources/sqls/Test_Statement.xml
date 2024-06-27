@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- TODO 015_02 MyBatis Configuration에서 사용하는 Mapper 파일 작성 -->
+<mapper namespace="com.min.edu.model.TestDaoImpl">
+	<select id="selectAllTest" resultType="com.min.edu.dto.TestDto">
+		<!-- resultType: 패키지명.클래스명 -->
+		SELECT JOB_ID, JOB_TITLE, MIN_SALARY, MAX_SALARY
+		FROM JOBS
+	</select>
+</mapper>
