@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.min.edu.model.mapper.UserDaoImpl">
+
+	<!-- 로그인 getLogin -->
+	<select id="getLogin" resultType="UserVo">
+		SELECT ID, NAME, EMAIL, AUTH,
+		JOININDATE
+		FROM USERINFO u
+		WHERE ID = #{id} AND PASSWORD = #{password}
+	</select>
+
+	<!-- 중복검사 isDuplicateCheck -->
+	<select id="isDuplicateCheck" resultType="java.lang.Integer">
+		SELECT COUNT(*)
+		FROM
+		USERINFO u
+		WHERE ID = #{id}
+	</select>
+
+	<!-- 회원가입 signupMember -->
+	<insert id="signupMember">
+		INSERT INTO USERINFO
+		(ID, NAME, PASSWORD, EMAIL, AUTH,
+		ENABLE, JOININDATE)
+		VALUES(#{id}, #{name}, #{password}, #{email}, 'U', 'Y', CURRENT_DATE)
+	</insert>
+
+	<!-- 회원전체조회 userSelectAll -->
+	<select id="userSelectAll" resultType="UserVo">
+		SELECT ID, NAME
+		FROM USERINFO
+		WHERE AUTH = 'U'
+	</select>
+
+	<!-- 회원검색 getSearchUser -->
+	<select id="getSearchUser" resultType="UserVo">
+		SELECT ID, NAME
+		FROM USERINFO u
+		WHERE AUTH = 'U'
+		<choose>
+			<when test="opt.equals('id')">
+				AND ID LIKE '%'||#{keyword}||'%'
+			</when>
+			<otherwise>
+				AND NAME LIKE '%'||#{keyword}||'%'
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<!-- 아이디찾기 findId -->
+	<select id="findId" resultType="java.lang.String">
+		SELECT ID
+		FROM USERINFO u
+		WHERE NAME = #{name}
+		AND EMAIL = #{email}
+		AND AUTH = 'U'
+	</select>
+	
+	<!-- 전체 사용자 조회 getAllUser -->
+	<select id="getAllUser" resultType="UserVo">
+		SELECT ID, NAME, PASSWORD, EMAIL, AUTH, ENABLE, JOININDATE
+	FROM USERINFO u
+	</select>
+	
+	<!-- 회원 권한 변경 -->
+	<update id="setChangeAuth">
+		UPDATE USERINFO SET AUTH = #{authValue}
+		WHERE ID IN 
+		<foreach collection="checkid" item="id" open="(" separator="," close=")">
+		<!-- 리스트로 받았을 땐 collection="list" 맵으로 받았을 땐 collection="key값 이름" -->
+			#{id}
+		</foreach>
+	</update>
+
+</mapper>

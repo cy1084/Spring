@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+
+	<!-- POJO를 Spring bean으로 등록하여, 다른 bean과 연결한다 -->
+	<bean id="daoLogAdvice" class="com.min.edu.aop.DaoLogAdvice"/>
+		
+		<!-- AOP의 동작 설정 -->
+		<aop:config>
+			<aop:pointcut expression="execution(public * com.min.edu.model.*Dao*.*(..))" id="daoLogPointCut"/>
+			<!-- expression이 포함되어 있는 모든 것 가져옴 -->
+			
+			<aop:aspect ref="daoLogAdvice">
+				<aop:before method="before" pointcut-ref="daoLogPointCut"/>
+				<aop:after-returning method="afterReturning" pointcut-ref="daoLogPointCut"/>
+				<aop:after-throwing method="error" pointcut-ref="daoLogPointCut" throwing="e"/>
+				<!-- public void error(JoinPoint j, Exception e)  여기 파라미터 이름 e와 일치해야 함! -->
+			</aop:aspect>
+		</aop:config>
+	
+</beans>

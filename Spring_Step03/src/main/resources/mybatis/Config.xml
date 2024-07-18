@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
 <configuration>
-<!-- TODO 015_03 mybatis의 환경 설정 -->
-<!--
-	mybatis 환경설정: TypeAlias, mapper, setting
-	spring 환경설정: properties, datasource, transaction 
- -->
-<mappers>
-	<mapper resource="sqls/Test_Statement.xml"/>
-	<mapper resource="sqls/EduBoard.xml"/>
-</mappers>
+	<typeAliases>
+		<typeAlias type="com.min.edu.dto.AnswerboardDto" alias="AnswerboardDto" />
+		<typeAlias type="com.min.edu.dto.UserInfoDto" alias="UserInfoDto" />
+	</typeAliases>
+	
+	<mappers>
+		<mapper resource="sqls/Answerboard_Statement.xml"/>
+		<mapper resource="sqls/UserInfo_Statement.xml"/>
+	</mappers>
+
+
 </configuration>

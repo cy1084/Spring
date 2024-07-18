@@ -1,0 +1,45 @@
+Spring
+- IoC/DI(Inversion of Control 제어의 역전/ Dependency Injection 의존성 주입)
+- AOP
+- OCP(Open Closed Principle 개폐의 원칙)
+
+
+*** AOP(Aspect Oriented Program 관점 지향 프로그램)
+	: log, transaction, exception 등 관점 외 관심사를 자동으로 처리되게 만드는 것
+
+용어
+1. Aspect
+	: 관점을 두 개로 구분하여 표현한다
+	 - CC(Core Concern 주 관심사)
+	 - CCC(Cross Cutting Concern 관점 외 관심사)
+2. Target
+	Aspect가 적용이 되는 곳(Expression 문법으로 작성)
+	
+3. Weaving 
+	: 지정된 객체(Expression 문법으로 선택된 것)를 새로운 프록시 객체(하나의 객체로 합쳐주는 작업)로 생성하는 과정
+
+	
+---- 3번까지 이력서에 작성하면 좋음 ----
+
+작업 용어
+ Advice - 어드바이스
+  CCC를 가지고 있는 메소드의 집합         4개의 어드바이스를 합쳐놓은것 = 하나의 메소드
+  
+ joinpoint
+  CCC가 CC와 합쳐져서 실행되는 시점
+  메소드 실행 전(before)
+  메소드 실행 후(after)
+  메소드 반환 결과가 있을때(afteReturing)
+  메소드 실행 후 예외 발생 시(afterThrowing)
+  메소드 실행 중 전 후 [ARound] -> 로그가 많이찍혀서 나눠서 찍음 [반환 , 전...]
+  
+  
+ pointcut
+    실행 대상(CC)이 되는 집합체의 위치
+    expression 문법
+    execution( public     void      com.min.edu.    *     .     *     .    (..))   <- .. 은 모든것 [있거나, 없거나, 여러개]를 뜻함
+             접근제한자    반환타입    대상의 패키지    클래스명      메소드 명     arguments
+ proxy(묶음)
+  weaving을 사용하기 위해서 객체를 연결하도록 하는 설정
+  <aop:aspect-autoproxy>
+ 
